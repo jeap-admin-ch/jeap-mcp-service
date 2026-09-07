@@ -1,0 +1,9 @@
+jeap:
+  mcp:
+    knowledge:
+      overview-docs-location: classpath:jeap-docs
+    docs:
+      docs-root: target/test-docs
+      max-docs: 7
+      min-score: 0.42
+      hybrid: false

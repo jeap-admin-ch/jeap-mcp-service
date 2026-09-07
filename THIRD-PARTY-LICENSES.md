@@ -1,0 +1,296 @@
+
+Third-Party Dependency Licenses
+===============================
+
+Third-party dependencies grouped by their license type (see [pom.xml](/pom.xml) for version information):
+
+
+Apache License Version 2.0
+-------------------------------
+
+ * ch.admin.bit.jeap:jeap-mcp-service-web - [ch.admin.bit.jeap:jeap-mcp-service-web](https://github.com/jeap-admin-ch/jeap-mcp-service/tree/main/jeap-mcp-service-web)
+ * ch.admin.bit.jeap:jeap-spring-boot-application-starter - [ch.admin.bit.jeap:jeap-spring-boot-application-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-application-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-logging-starter - [ch.admin.bit.jeap:jeap-spring-boot-logging-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-logging-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-monitoring-starter - [ch.admin.bit.jeap:jeap-spring-boot-monitoring-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-monitoring-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-rest-request-tracing - [ch.admin.bit.jeap:jeap-spring-boot-rest-request-tracing](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-rest-request-tracing)
+ * ch.admin.bit.jeap:jeap-spring-boot-security-client-starter - [ch.admin.bit.jeap:jeap-spring-boot-security-client-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-security-client-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-security-starter - [ch.admin.bit.jeap:jeap-spring-boot-security-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-security-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-security-starter-test - [ch.admin.bit.jeap:jeap-spring-boot-security-starter-test](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-security-starter-test)
+ * ch.admin.bit.jeap:jeap-spring-boot-swagger - [ch.admin.bit.jeap:jeap-spring-boot-swagger](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-swagger)
+ * ch.admin.bit.jeap:jeap-spring-boot-swagger-starter - [ch.admin.bit.jeap:jeap-spring-boot-swagger-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-swagger-starter)
+ * ch.admin.bit.jeap:jeap-spring-boot-web-config-starter - [ch.admin.bit.jeap:jeap-spring-boot-web-config-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-web-config-starter)
+ * Internet Time Utility - [com.ethlo.time:itu](https://github.com/ethlo/itu)
+ * ClassMate - [com.fasterxml:classmate](https://github.com/FasterXML/java-classmate)
+ * Jackson-annotations - [com.fasterxml.jackson.core:jackson-annotations](https://github.com/FasterXML/jackson)
+ * Jackson-core - [com.fasterxml.jackson.core:jackson-core](https://github.com/FasterXML/jackson-core)
+ * jackson-databind - [com.fasterxml.jackson.core:jackson-databind](https://github.com/FasterXML/jackson)
+ * Jackson-dataformat-YAML - [com.fasterxml.jackson.dataformat:jackson-dataformat-yaml](https://github.com/FasterXML/jackson-dataformats-text)
+ * Jackson datatype: JSR310 - [com.fasterxml.jackson.datatype:jackson-datatype-jsr310](https://github.com/FasterXML/jackson-modules-java8/jackson-datatype-jsr310)
+ * Caffeine cache - [com.github.ben-manes.caffeine:caffeine](https://github.com/ben-manes/caffeine)
+ * docker-java-api - [com.github.docker-java:docker-java-api](https://github.com/docker-java/docker-java)
+ * docker-java-transport - [com.github.docker-java:docker-java-transport](https://github.com/docker-java/docker-java)
+ * docker-java-transport-zerodep - [com.github.docker-java:docker-java-transport-zerodep](https://github.com/docker-java/docker-java)
+ * JCIP Annotations under Apache License - [com.github.stephenc.jcip:jcip-annotations](http://stephenc.github.com/jcip-annotations)
+ * Java JSON Schema Generator - [com.github.victools:jsonschema-generator](https://github.com/victools/jsonschema-generator)
+ * Java JSON Schema Generator Module – jackson - [com.github.victools:jsonschema-module-jackson](https://github.com/victools/jsonschema-generator)
+ * Java JSON Schema Generator Module – swagger (2.x) - [com.github.victools:jsonschema-module-swagger-2](https://github.com/victools/jsonschema-generator/jsonschema-module-swagger-2)
+ * error-prone annotations - [com.google.errorprone:error_prone_annotations](https://errorprone.info/error_prone_annotations)
+ * json-path - [com.jayway.jsonpath:json-path](https://github.com/jayway/JsonPath)
+ * JsonSchemaValidator - [com.networknt:json-schema-validator](https://github.com/networknt/json-schema-validator)
+ * Nimbus Content Type - [com.nimbusds:content-type](https://bitbucket.org/connect2id/nimbus-content-type)
+ * Nimbus LangTag - [com.nimbusds:lang-tag](https://bitbucket.org/connect2id/nimbus-language-tags)
+ * Nimbus JOSE+JWT - [com.nimbusds:nimbus-jose-jwt](https://bitbucket.org/connect2id/nimbus-jose-jwt)
+ * OAuth 2.0 SDK with OpenID Connect and Federation extensions - [com.nimbusds:oauth2-oidc-sdk](https://bitbucket.org/connect2id/oauth-2.0-sdk-with-openid-connect-extensions)
+ * okhttp - [com.squareup.okhttp3:okhttp-jvm](https://square.github.io/okhttp/)
+ * okio - [com.squareup.okio:okio-jvm](https://github.com/square/okio/)
+ * JSON library from Android SDK - [com.vaadin.external.google:android-json](http://developer.android.com/sdk)
+ * Apache Commons Codec - [commons-codec:commons-codec](https://commons.apache.org/proper/commons-codec/)
+ * Apache Commons IO - [commons-io:commons-io](https://commons.apache.org/proper/commons-io/)
+ * Apache Commons Logging - [commons-logging:commons-logging](https://commons.apache.org/proper/commons-logging/)
+ * context-propagation - [io.micrometer:context-propagation](https://github.com/micrometer-metrics/context-propagation)
+ * micrometer-commons - [io.micrometer:micrometer-commons](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-core - [io.micrometer:micrometer-core](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-jakarta9 - [io.micrometer:micrometer-jakarta9](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-observation - [io.micrometer:micrometer-observation](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-registry-otlp - [io.micrometer:micrometer-registry-otlp](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-registry-prometheus - [io.micrometer:micrometer-registry-prometheus](https://github.com/micrometer-metrics/micrometer-commercial)
+ * micrometer-tracing - [io.micrometer:micrometer-tracing](https://github.com/micrometer-metrics/tracing-commercial)
+ * micrometer-tracing-bridge-otel - [io.micrometer:micrometer-tracing-bridge-otel](https://github.com/micrometer-metrics/tracing-commercial)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-api](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-common](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-context](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-exporter-common](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-exporter-otlp](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-exporter-otlp-common](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-exporter-sender-okhttp](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-extension-trace-propagators](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk-common](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk-extension-autoconfigure-spi](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk-logs](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk-metrics](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Java - [io.opentelemetry:opentelemetry-sdk-trace](https://github.com/open-telemetry/opentelemetry-java)
+ * OpenTelemetry Protocol - [io.opentelemetry.proto:opentelemetry-proto](https://github.com/open-telemetry/opentelemetry-proto-java)
+ * OpenTelemetry Semantic Conventions Java - [io.opentelemetry.semconv:opentelemetry-semconv](https://github.com/open-telemetry/semantic-conventions-java)
+ * Non-Blocking Reactive Foundation for the JVM - [io.projectreactor:reactor-core](https://github.com/reactor/reactor-core)
+ * Prometheus Metrics Config - [io.prometheus:prometheus-metrics-config](http://github.com/prometheus/client_java/client_java/prometheus-metrics-config)
+ * Prometheus Metrics Core - [io.prometheus:prometheus-metrics-core](http://github.com/prometheus/client_java/client_java/prometheus-metrics-core)
+ * Prometheus Metrics Exposition Formats - [io.prometheus:prometheus-metrics-exposition-formats](http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-formats)
+ * Prometheus Metrics Exposition Text Formats - [io.prometheus:prometheus-metrics-exposition-textformats](http://github.com/prometheus/client_java/client_java/prometheus-metrics-exposition-textformats)
+ * Prometheus Metrics Model - [io.prometheus:prometheus-metrics-model](http://github.com/prometheus/client_java/client_java/prometheus-metrics-model)
+ * Prometheus Metrics Tracer Common - [io.prometheus:prometheus-metrics-tracer-common](http://github.com/prometheus/client_java/client_java/prometheus-metrics-tracer/prometheus-metrics-tracer-common)
+ * json-path - [io.rest-assured:json-path](https://rest-assured.io/)
+ * REST Assured - [io.rest-assured:rest-assured](https://rest-assured.io/)
+ * rest-assured-common - [io.rest-assured:rest-assured-common](https://rest-assured.io/)
+ * spring-commons - [io.rest-assured:spring-commons](https://rest-assured.io/)
+ * spring-mock-mvc - [io.rest-assured:spring-mock-mvc](https://rest-assured.io/)
+ * xml-path - [io.rest-assured:xml-path](https://rest-assured.io/xml-path/)
+ * swagger-annotations-jakarta - [io.swagger.core.v3:swagger-annotations-jakarta](https://github.com/swagger-api/swagger-core/modules/swagger-annotations-jakarta)
+ * swagger-core-jakarta - [io.swagger.core.v3:swagger-core-jakarta](https://github.com/swagger-api/swagger-core/modules/swagger-core-jakarta)
+ * swagger-models-jakarta - [io.swagger.core.v3:swagger-models-jakarta](https://github.com/swagger-api/swagger-core/modules/swagger-models-jakarta)
+ * Jakarta Validation API - [jakarta.validation:jakarta.validation-api](https://beanvalidation.org)
+ * Byte Buddy (without dependencies) - [net.bytebuddy:byte-buddy](https://bytebuddy.net/byte-buddy)
+ * Byte Buddy agent - [net.bytebuddy:byte-buddy-agent](https://bytebuddy.net/byte-buddy-agent)
+ * Java Native Access - [net.java.dev.jna:jna](https://github.com/java-native-access/jna)
+ * Logstash Logback Encoder - [net.logstash.logback:logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)
+ * ASM based accessors helper used by json-smart - [net.minidev:accessors-smart](https://urielch.github.io/)
+ * JSON Small and Fast Parser - [net.minidev:json-smart](https://urielch.github.io/)
+ * Apache Commons Collections - [org.apache.commons:commons-collections4](https://commons.apache.org/proper/commons-collections/)
+ * Apache Commons Compress - [org.apache.commons:commons-compress](https://commons.apache.org/proper/commons-compress/)
+ * Apache Commons Lang - [org.apache.commons:commons-lang3](https://commons.apache.org/proper/commons-lang/)
+ * Apache Groovy - [org.apache.groovy:groovy](https://groovy-lang.org)
+ * Apache Groovy - [org.apache.groovy:groovy-json](https://groovy-lang.org)
+ * Apache Groovy - [org.apache.groovy:groovy-xml](https://groovy-lang.org)
+ * Apache HttpClient - [org.apache.httpcomponents:httpclient](http://hc.apache.org/httpcomponents-client)
+ * Apache HttpCore - [org.apache.httpcomponents:httpcore](http://hc.apache.org/httpcomponents-core-ga)
+ * Apache HttpClient Mime - [org.apache.httpcomponents:httpmime](http://hc.apache.org/httpcomponents-client)
+ * Apache Log4j API - [org.apache.logging.log4j:log4j-api](https://logging.apache.org/log4j/2.x/)
+ * Log4j API to SLF4J Adapter - [org.apache.logging.log4j:log4j-to-slf4j](https://logging.apache.org/log4j/2.x/)
+ * tomcat-embed-core - [org.apache.tomcat.embed:tomcat-embed-core](https://tomcat.apache.org/)
+ * tomcat-embed-el - [org.apache.tomcat.embed:tomcat-embed-el](https://tomcat.apache.org/)
+ * tomcat-embed-websocket - [org.apache.tomcat.embed:tomcat-embed-websocket](https://tomcat.apache.org/)
+ * org.apiguardian:apiguardian-api - [org.apiguardian:apiguardian-api](https://github.com/apiguardian-team/apiguardian)
+ * AssertJ Core - [org.assertj:assertj-core](https://assertj.github.io/doc/#assertj-core)
+ * Awaitility - [org.awaitility:awaitility](http://awaitility.org)
+ * TagSoup - [org.ccil.cowan.tagsoup:tagsoup](http://home.ccil.org/~cowan/XML/tagsoup/)
+ * Hibernate Validator Engine - [org.hibernate.validator:hibernate-validator](https://hibernate.org/validator)
+ * JBoss Logging 3 - [org.jboss.logging:jboss-logging](https://www.jboss.org)
+ * IntelliJ IDEA Annotations - [org.jetbrains:annotations](http://www.jetbrains.org)
+ * JetBrains Java Annotations - [org.jetbrains:annotations](https://github.com/JetBrains/java-annotations)
+ * Kotlin Stdlib - [org.jetbrains.kotlin:kotlin-stdlib](https://kotlinlang.org/)
+ * JSpecify annotations - [org.jspecify:jspecify](https://jspecify.dev/)
+ * Objenesis - [org.objenesis:objenesis](http://objenesis.org/objenesis)
+ * org.opentest4j:opentest4j - [org.opentest4j:opentest4j](https://github.com/ota4j-team/opentest4j)
+ * JSONassert - [org.skyscreamer:jsonassert](https://github.com/skyscreamer/JSONassert)
+ * SnakeYAML Engine - [org.snakeyaml:snakeyaml-engine](https://bitbucket.org/snakeyaml/snakeyaml-engine)
+ * springdoc-openapi-starter-common - [org.springdoc:springdoc-openapi-starter-common](https://springdoc.org/springdoc-openapi-starter-common/)
+ * springdoc-openapi-starter-webmvc-api - [org.springdoc:springdoc-openapi-starter-webmvc-api](https://springdoc.org/springdoc-openapi-starter-webmvc-api/)
+ * springdoc-openapi-starter-webmvc-ui - [org.springdoc:springdoc-openapi-starter-webmvc-ui](https://springdoc.org/springdoc-openapi-starter-webmvc-ui/)
+ * Spring AOP - [org.springframework:spring-aop](https://github.com/spring-projects/spring-framework)
+ * Spring Aspects - [org.springframework:spring-aspects](https://github.com/spring-projects/spring-framework)
+ * Spring Beans - [org.springframework:spring-beans](https://github.com/spring-projects/spring-framework)
+ * Spring Context - [org.springframework:spring-context](https://github.com/spring-projects/spring-framework)
+ * Spring Core - [org.springframework:spring-core](https://github.com/spring-projects/spring-framework)
+ * Spring Expression Language (SpEL) - [org.springframework:spring-expression](https://github.com/spring-projects/spring-framework)
+ * Spring Messaging - [org.springframework:spring-messaging](https://github.com/spring-projects/spring-framework)
+ * Spring TestContext Framework - [org.springframework:spring-test](https://github.com/spring-projects/spring-framework)
+ * Spring Web - [org.springframework:spring-web](https://github.com/spring-projects/spring-framework)
+ * Spring Web MVC - [org.springframework:spring-webmvc](https://github.com/spring-projects/spring-framework)
+ * Spring Web MVC transports - [org.springframework.ai:mcp-spring-webmvc](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Client Common Auto Configuration - [org.springframework.ai:spring-ai-autoconfigure-mcp-client-common](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Client (HttpClient) Auto Configuration - [org.springframework.ai:spring-ai-autoconfigure-mcp-client-httpclient](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Server Common Auto Configuration for STDIO, SSE and Streamable-HTTP - [org.springframework.ai:spring-ai-autoconfigure-mcp-server-common](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Server WebMVC Auto Configuration - [org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc](https://github.com/spring-projects/spring-ai)
+ * Spring AI Commons - [org.springframework.ai:spring-ai-commons](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Client - [org.springframework.ai:spring-ai-mcp](https://github.com/spring-projects/spring-ai)
+ * Spring AI MCP Java SDK - Annotations - [org.springframework.ai:spring-ai-mcp-annotations](https://github.com/spring-projects/spring-ai)
+ * Spring AI Model - [org.springframework.ai:spring-ai-model](https://github.com/spring-projects/spring-ai)
+ * Spring AI Starter - MCP Client - [org.springframework.ai:spring-ai-starter-mcp-client](https://github.com/spring-projects/spring-ai)
+ * Spring AI Starter - MCP Server WebMvc - [org.springframework.ai:spring-ai-starter-mcp-server-webmvc](https://github.com/spring-projects/spring-ai)
+ * Spring AI Template StringTemplate - [org.springframework.ai:spring-ai-template-st](https://github.com/spring-projects/spring-ai)
+ * spring-boot - [org.springframework.boot:spring-boot](https://spring.io/projects/spring-boot)
+ * spring-boot-actuator - [org.springframework.boot:spring-boot-actuator](https://spring.io/projects/spring-boot)
+ * spring-boot-actuator-autoconfigure - [org.springframework.boot:spring-boot-actuator-autoconfigure](https://spring.io/projects/spring-boot)
+ * spring-boot-autoconfigure - [org.springframework.boot:spring-boot-autoconfigure](https://spring.io/projects/spring-boot)
+ * spring-boot-health - [org.springframework.boot:spring-boot-health](https://spring.io/projects/spring-boot)
+ * spring-boot-http-client - [org.springframework.boot:spring-boot-http-client](https://spring.io/projects/spring-boot)
+ * spring-boot-http-converter - [org.springframework.boot:spring-boot-http-converter](https://spring.io/projects/spring-boot)
+ * spring-boot-jackson - [org.springframework.boot:spring-boot-jackson](https://spring.io/projects/spring-boot)
+ * spring-boot-loader - [org.springframework.boot:spring-boot-loader](https://spring.io/projects/spring-boot)
+ * spring-boot-micrometer-metrics - [org.springframework.boot:spring-boot-micrometer-metrics](https://spring.io/projects/spring-boot)
+ * spring-boot-micrometer-observation - [org.springframework.boot:spring-boot-micrometer-observation](https://spring.io/projects/spring-boot)
+ * spring-boot-micrometer-tracing - [org.springframework.boot:spring-boot-micrometer-tracing](https://spring.io/projects/spring-boot)
+ * spring-boot-micrometer-tracing-opentelemetry - [org.springframework.boot:spring-boot-micrometer-tracing-opentelemetry](https://spring.io/projects/spring-boot)
+ * spring-boot-opentelemetry - [org.springframework.boot:spring-boot-opentelemetry](https://spring.io/projects/spring-boot)
+ * spring-boot-restclient - [org.springframework.boot:spring-boot-restclient](https://spring.io/projects/spring-boot)
+ * spring-boot-security - [org.springframework.boot:spring-boot-security](https://spring.io/projects/spring-boot)
+ * spring-boot-security-oauth2-client - [org.springframework.boot:spring-boot-security-oauth2-client](https://spring.io/projects/spring-boot)
+ * spring-boot-security-oauth2-resource-server - [org.springframework.boot:spring-boot-security-oauth2-resource-server](https://spring.io/projects/spring-boot)
+ * spring-boot-servlet - [org.springframework.boot:spring-boot-servlet](https://spring.io/projects/spring-boot)
+ * spring-boot-starter - [org.springframework.boot:spring-boot-starter](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-actuator - [org.springframework.boot:spring-boot-starter-actuator](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-jackson - [org.springframework.boot:spring-boot-starter-jackson](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-logging - [org.springframework.boot:spring-boot-starter-logging](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-micrometer-metrics - [org.springframework.boot:spring-boot-starter-micrometer-metrics](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-opentelemetry - [org.springframework.boot:spring-boot-starter-opentelemetry](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-restclient - [org.springframework.boot:spring-boot-starter-restclient](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-security - [org.springframework.boot:spring-boot-starter-security](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-security-oauth2-client - [org.springframework.boot:spring-boot-starter-security-oauth2-client](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-security-oauth2-resource-server - [org.springframework.boot:spring-boot-starter-security-oauth2-resource-server](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-test - [org.springframework.boot:spring-boot-starter-test](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-tomcat - [org.springframework.boot:spring-boot-starter-tomcat](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-tomcat-runtime - [org.springframework.boot:spring-boot-starter-tomcat-runtime](https://spring.io/projects/spring-boot)
+ * spring-boot-starter-web - [org.springframework.boot:spring-boot-starter-web](https://spring.io/projects/spring-boot)
+ * spring-boot-test - [org.springframework.boot:spring-boot-test](https://spring.io/projects/spring-boot)
+ * spring-boot-test-autoconfigure - [org.springframework.boot:spring-boot-test-autoconfigure](https://spring.io/projects/spring-boot)
+ * spring-boot-tomcat - [org.springframework.boot:spring-boot-tomcat](https://spring.io/projects/spring-boot)
+ * spring-boot-validation - [org.springframework.boot:spring-boot-validation](https://spring.io/projects/spring-boot)
+ * spring-boot-web-server - [org.springframework.boot:spring-boot-web-server](https://spring.io/projects/spring-boot)
+ * spring-boot-webmvc - [org.springframework.boot:spring-boot-webmvc](https://spring.io/projects/spring-boot)
+ * Spring Cloud Context - [org.springframework.cloud:spring-cloud-context](https://projects.spring.io/spring-cloud/spring-cloud-context/)
+ * Spring Retry - [org.springframework.retry:spring-retry](https://github.com/spring-projects/spring-retry)
+ * spring-security-config - [org.springframework.security:spring-security-config](https://spring.io/projects/spring-security)
+ * spring-security-core - [org.springframework.security:spring-security-core](https://spring.io/projects/spring-security)
+ * spring-security-crypto - [org.springframework.security:spring-security-crypto](https://spring.io/projects/spring-security)
+ * spring-security-oauth2-client - [org.springframework.security:spring-security-oauth2-client](https://spring.io/projects/spring-security)
+ * spring-security-oauth2-core - [org.springframework.security:spring-security-oauth2-core](https://spring.io/projects/spring-security)
+ * spring-security-oauth2-jose - [org.springframework.security:spring-security-oauth2-jose](https://spring.io/projects/spring-security)
+ * spring-security-oauth2-resource-server - [org.springframework.security:spring-security-oauth2-resource-server](https://spring.io/projects/spring-security)
+ * spring-security-test - [org.springframework.security:spring-security-test](https://spring.io/projects/spring-security)
+ * spring-security-web - [org.springframework.security:spring-security-web](https://spring.io/projects/spring-security)
+ * Swagger UI - [org.webjars:swagger-ui](https://www.webjars.org)
+ * WireMock - [org.wiremock:wiremock-standalone](http://wiremock.org)
+ * wiremock-spring-boot - [org.wiremock.integrations:wiremock-spring-boot](https://github.com/wiremock/wiremock-spring-boot)
+ * wiremock-spring-boot-standalone - [org.wiremock.integrations:wiremock-spring-boot-standalone](https://github.com/wiremock/wiremock-spring-boot)
+ * org.xmlunit:xmlunit-core - [org.xmlunit:xmlunit-core](https://www.xmlunit.org/)
+ * SnakeYAML - [org.yaml:snakeyaml](https://bitbucket.org/snakeyaml/snakeyaml)
+ * Jackson-core - [tools.jackson.core:jackson-core](https://github.com/FasterXML/jackson-core)
+ * jackson-databind - [tools.jackson.core:jackson-databind](https://github.com/FasterXML/jackson)
+ * Jackson-dataformat-YAML - [tools.jackson.dataformat:jackson-dataformat-yaml](https://github.com/FasterXML/jackson-dataformats-text)
+
+BSD 2-Clause License
+-------------------------------
+
+ * HdrHistogram - [org.hdrhistogram:HdrHistogram](http://hdrhistogram.github.io/HdrHistogram/)
+
+BSD License 3
+-------------------------------
+
+ * Protocol Buffers [Core] - [com.google.protobuf:protobuf-java](https://developers.google.com/protocol-buffers/protobuf-java/)
+ * ANTLR 4 Runtime - [org.antlr:antlr4-runtime](https://www.antlr.org/antlr4-runtime/)
+ * Hamcrest - [org.hamcrest:hamcrest](http://hamcrest.org/JavaHamcrest/)
+ * asm - [org.ow2.asm:asm](http://asm.ow2.io/)
+
+BSD licence
+-------------------------------
+
+ * ANTLR 3 Runtime - [org.antlr:antlr-runtime](http://www.antlr.org)
+
+EPL-2.0
+-------------------------------
+
+ * Logback Classic Module - [ch.qos.logback:logback-classic](http://logback.qos.ch/logback-classic)
+ * Logback Core Module - [ch.qos.logback:logback-core](http://logback.qos.ch/logback-core)
+
+Eclipse Distribution License - v 1.0
+-------------------------------
+
+ * Jakarta Activation API - [jakarta.activation:jakarta.activation-api](https://github.com/jakartaee/jaf-api)
+ * Jakarta XML Binding API - [jakarta.xml.bind:jakarta.xml.bind-api](https://github.com/jakartaee/jaxb-api/jakarta.xml.bind-api)
+
+Eclipse Public License v2.0
+-------------------------------
+
+ * Jakarta Annotations API - [jakarta.annotation:jakarta.annotation-api](https://projects.eclipse.org/projects/ee4j.ca)
+ * AspectJ Weaver - [org.aspectj:aspectjweaver](https://www.eclipse.org/aspectj/)
+ * JUnit Jupiter (Aggregator) - [org.junit.jupiter:junit-jupiter](https://junit.org/)
+ * JUnit Jupiter API - [org.junit.jupiter:junit-jupiter-api](https://junit.org/)
+ * JUnit Jupiter Engine - [org.junit.jupiter:junit-jupiter-engine](https://junit.org/)
+ * JUnit Jupiter Params - [org.junit.jupiter:junit-jupiter-params](https://junit.org/)
+ * JUnit Platform Commons - [org.junit.platform:junit-platform-commons](https://junit.org/)
+ * JUnit Platform Engine API - [org.junit.platform:junit-platform-engine](https://junit.org/)
+
+GNU General Public License, version 2 (GPL2), with the classpath exception
+-------------------------------
+
+ * Jakarta Annotations API - [jakarta.annotation:jakarta.annotation-api](https://projects.eclipse.org/projects/ee4j.ca)
+
+LGPL-2.1-only
+-------------------------------
+
+ * Logback Classic Module - [ch.qos.logback:logback-classic](http://logback.qos.ch/logback-classic)
+ * Logback Core Module - [ch.qos.logback:logback-core](http://logback.qos.ch/logback-core)
+
+LGPL-2.1-or-later
+-------------------------------
+
+ * Java Native Access - [net.java.dev.jna:jna](https://github.com/java-native-access/jna)
+
+MIT License
+-------------------------------
+
+ * JTokkit - [com.knuddels:jtokkit](https://github.com/knuddelsgmbh/jtokkit)
+ * Java MCP SDK - [io.modelcontextprotocol.sdk:mcp](https://github.com/modelcontextprotocol/java-sdk)
+ * Java MCP SDK Core - [io.modelcontextprotocol.sdk:mcp-core](https://github.com/modelcontextprotocol/java-sdk)
+ * Java MCP SDK JSON Jackson 3 - [io.modelcontextprotocol.sdk:mcp-json-jackson3](https://github.com/modelcontextprotocol/java-sdk)
+ * Logstash Logback Encoder - [net.logstash.logback:logstash-logback-encoder](https://github.com/logfellow/logstash-logback-encoder)
+ * mockito-core - [org.mockito:mockito-core](https://github.com/mockito/mockito)
+ * mockito-junit-jupiter - [org.mockito:mockito-junit-jupiter](https://github.com/mockito/mockito)
+ * Project Lombok - [org.projectlombok:lombok](https://projectlombok.org)
+ * reactive-streams - [org.reactivestreams:reactive-streams](http://www.reactive-streams.org/)
+ * Duct Tape - [org.rnorth.duct-tape:duct-tape](https://github.com/rnorth/duct-tape)
+ * JUL to SLF4J bridge - [org.slf4j:jul-to-slf4j](http://www.slf4j.org)
+ * SLF4J API Module - [org.slf4j:slf4j-api](http://www.slf4j.org)
+ * Testcontainers Core - [org.testcontainers:testcontainers](https://java.testcontainers.org)
+ * webjars-locator-lite - [org.webjars:webjars-locator-lite](https://webjars.org)
+
+Public Domain
+-------------------------------
+
+ * AOP alliance - [aopalliance:aopalliance](http://aopalliance.sourceforge.net)
+ * HdrHistogram - [org.hdrhistogram:HdrHistogram](http://hdrhistogram.github.io/HdrHistogram/)
+
+The BSD License
+-------------------------------
+
+ * StringTemplate 4 - [org.antlr:ST4](http://nexus.sonatype.org/oss-repository-hosting.html/ST4)

@@ -1,0 +1,40 @@
+publiccodeYmlVersion: 0.5.0
+name: jeap-mcp-service
+applicationSuite: jEAP
+softwareVersion: 1.0.0
+releaseDate: 2026-09-11
+url: "https://github.com/jeap-admin-ch/jeap-mcp-service.git"
+landingURL: "https://github.com/jeap-admin-ch/jeap"
+platforms:
+  - web
+categories:
+  - application-development
+developmentStatus: stable
+softwareType: library
+organisation:
+  uri: https://ld.admin.ch/office/V.1.7
+  name: Federal Office of Information Technology, Systems and Telecommunication
+description:
+  en:
+    localisedName: jeap-mcp-service
+    shortDescription: A Spring Boot/jEAP service that exposes an MCP server for agentic development of jEAP applications
+    longDescription: >
+      jeap-mcp-server is a Spring Boot/jEAP service that exposes an MCP server for agentic development of jEAP
+      applications. It provides a fixed set of `@Tool`-annotated Java methods over HTTP MCP (Spring AI,
+      Streamable HTTP), letting AI coding agents look up jEAP source, examples, and platform documentation
+      directly. This repository is the reusable core (jeap-mcp-service-web); platform-specific deployment
+      repos depend on it and build their own deployable images.
+    features:
+      - HTTP MCP server (Spring AI, Streamable HTTP)
+      - Fixed jEAP tool surface for agentic development
+legal:
+  license: Apache-2.0
+maintenance:
+  type: internal
+  contacts:
+    - name: Federal Office of Information Technology, Systems and Telecommunication FOITT
+      email: jeap-community@bit.admin.ch
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <url>https://github.com/jeap-admin-ch/jeap-mcp-service/tree/main</url>
+    <scm>
+        <url>https://github.com/jeap-admin-ch/jeap-mcp-service.git</url>
+        <connection>scm:git:git://github.com/jeap-admin-ch/jeap-mcp-service.git</connection>
+        <developerConnection>scm:git:ssh://github.com:jeap-admin-ch/jeap-mcp-service.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>BIT</name>
+            <email>jeap-community@bit.admin.ch</email>
+            <organization>Federal Office of Information Technology, Systems and Telecommunication FOITT</organization>
+            <organizationUrl>https://www.bit.admin.ch/</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <parent>
+        <groupId>ch.admin.bit.jeap</groupId>
+        <artifactId>jeap-spring-boot-parent</artifactId>
+        <version>40.11.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>ch.admin.bit.jeap</groupId>
+    <artifactId>jeap-mcp-service</artifactId>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <description>The jEAP MCP server: a reusable service exposing jEAP knowledge (source, docs,
+        examples) to AI coding agents over MCP. Built as a library (jeap-mcp-service-web) plus a
+        thin instance parent (jeap-mcp-service-instance) that platform-specific deployment repos
+        depend on to assemble their own runnable service, following the same pattern as
+        jeap-archrepo-service.</description>
+
+    <properties>
+        <java-uuid-generator.version>5.1.0</java-uuid-generator.version>
+        <spring-ai.version>2.0.1</spring-ai.version>
+        <mcp-sdk.version>2.0.1</mcp-sdk.version>
+        <maven.javadoc.skip>false</maven.javadoc.skip>
+    </properties>
+
+    <modules>
+        <module>jeap-mcp-service-web</module>
+        <module>jeap-mcp-service-instance</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Overrides the MCP Java SDK 2.0.0 pinned by Spring AI 2.0.1: SDK 2.0.0 answers unknown
+                 JSON-RPC methods such as server/discover (MCP spec 2026-07-28) with HTTP 500 instead of a
+                 JSON-RPC "method not found" error (modelcontextprotocol/java-sdk#1072, fixed in 2.0.1).
+                 Remove once a Spring AI release bundles MCP Java SDK >= 2.0.1. Must precede spring-ai-bom. -->
+            <dependency>
+                <groupId>io.modelcontextprotocol.sdk</groupId>
+                <artifactId>mcp-bom</artifactId>
+                <version>${mcp-sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>ch.admin.bit.jeap</groupId>
+                <artifactId>jeap-mcp-service-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- Check third-party license compliance -->
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+            <!-- Generate third-party license list, aggregated across jeap-mcp-service-web and
+                 jeap-mcp-service-instance - works correctly now that this is a real pom-packaged
+                 multi-module reactor (aggregate-add-third-party is a no-op on a single jar module,
+                 which is why this used to need a workaround before this repo had submodules). -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

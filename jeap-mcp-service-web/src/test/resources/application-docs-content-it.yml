@@ -1,0 +1,13 @@
+# Upstream stdio connection for JeapDocsIT
+spring:
+  ai:
+    mcp:
+      client:
+        enabled: true
+        stdio:
+          connections:
+            project-rag:
+              command: /usr/local/bin/project-rag
+              args:
+                - --model-path
+                - /home/raguser/models/all-MiniLM-L6-v2

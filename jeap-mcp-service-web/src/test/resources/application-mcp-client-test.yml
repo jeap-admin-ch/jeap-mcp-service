@@ -1,0 +1,19 @@
+spring:
+  ai:
+    mcp:
+      client:
+        enabled: true
+        type: SYNC
+        request-timeout: 60s
+        stdio:
+          connections:
+            project-rag:
+              command: ${PROJECT_RAG_BINARY:/home/dev/IdeaProjects/project-rag/target/release/project-rag}
+              args:
+                - --model-path
+                - ${PROJECT_RAG_MODEL_PATH:/home/dev/models/all-MiniLM-L6-v2}
+
+jeap:
+  mcp:
+    knowledge:
+      overview-docs-location: classpath:jeap-docs
