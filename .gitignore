@@ -1,0 +1,28 @@
+# Created by .ignore support plugin (hsz.mobi)
+target/
+**/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
+.idea/*
+!.idea/runConfigurations/
+
+# START MODULE object-storage
+### Localstack ###
+/docker/.localstack
+/docker/localstack_data
+# END MODULE object-storage
+
+*.versionsBackup
