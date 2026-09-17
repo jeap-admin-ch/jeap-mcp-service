@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-09-17
+
+### Removed
+- Removed the `java-uuid-generator.version` property: it pinned the managed version to 5.1.0 while the parent is on 5.2.0, and no module declares the dependency. The managed version now follows `jeap-internal-spring-boot-parent` again.
+
 ## [2.2.0] - 2026-09-16
 
 ### Dependencies
