@@ -65,6 +65,25 @@ public class McpMetrics {
                     + "name and whether any suggestion matched.";
     public static final String MATCHED_TAG = "matched";
 
+    // Counter for a jeap_* tool argument rejected by server-side validation (over-long free text,
+    // oversized list, file_path outside the indexed source root, ...). The jeap_* tools are
+    // reachable anonymously (no caller identity), so this is the primary signal for distinguishing
+    // an anonymous caller probing/abusing the argument limits from normal traffic - see
+    // JeapRagProperties#validate.
+    public static final String ARGUMENTS_REJECTED_COUNTER = "jeap.mcp.tool.arguments.rejected";
+    static final String ARGUMENTS_REJECTED_DESCRIPTION =
+            "Tool-call arguments rejected by server-side validation, by jEAP tool and argument name.";
+    public static final String ARGUMENT_TAG = "argument";
+
+    // Counter for a jeap_* tool's limit/depth argument silently capped by JeapRagProperties -
+    // this is the original abuse case this server hardens against ("force an unbounded query
+    // against the shared project-rag sidecar"), and unlike a rejection it never surfaces in the
+    // tool's own response, so without this counter it would be invisible.
+    public static final String ARGUMENTS_CLAMPED_COUNTER = "jeap.mcp.tool.arguments.clamped";
+    static final String ARGUMENTS_CLAMPED_DESCRIPTION =
+            "Tool-call limit/depth arguments silently capped by server-side clamping, by jEAP tool "
+                    + "and argument name.";
+
     private final MeterRegistry meterRegistry;
 
     public McpMetrics(MeterRegistry meterRegistry) {
@@ -137,6 +156,33 @@ public class McpMetrics {
                 .description(RESOURCE_COMPLETION_CALLS_DESCRIPTION)
                 .tag(RESOURCE_TAG, resourceName)
                 .tag(MATCHED_TAG, String.valueOf(matched))
+                .register(meterRegistry)
+                .increment();
+    }
+
+    /**
+     * Count one {@code jeap_*} tool argument rejected by server-side validation, tagged by the
+     * jEAP tool name and the rejected argument's name.
+     */
+    public void recordArgumentRejected(String jeapToolName, String argumentName) {
+        Counter.builder(ARGUMENTS_REJECTED_COUNTER)
+                .description(ARGUMENTS_REJECTED_DESCRIPTION)
+                .tag(TOOL_TAG, jeapToolName)
+                .tag(ARGUMENT_TAG, argumentName)
+                .register(meterRegistry)
+                .increment();
+    }
+
+    /**
+     * Count one {@code jeap_*} tool's {@code limit}/{@code depth} argument actually capped
+     * (caller requested more than the configured maximum), tagged by the jEAP tool name and the
+     * argument name ({@code "limit"} or {@code "depth"}).
+     */
+    public void recordArgumentClamped(String jeapToolName, String argumentName) {
+        Counter.builder(ARGUMENTS_CLAMPED_COUNTER)
+                .description(ARGUMENTS_CLAMPED_DESCRIPTION)
+                .tag(TOOL_TAG, jeapToolName)
+                .tag(ARGUMENT_TAG, argumentName)
                 .register(meterRegistry)
                 .increment();
     }

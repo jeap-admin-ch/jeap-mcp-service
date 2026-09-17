@@ -4,6 +4,9 @@ package ch.admin.bit.jeap.mcp.docs;
  * A documentation reference split into its resolvable {@code path} and an optional {@code anchor}.
  * A trailing {@code #anchor} is kept (so callers can echo it back); a {@code ?query} is
  * dropped.
+ *
+ * @param path   the resolvable, repo-prefixed document path (without anchor/query)
+ * @param anchor the trailing {@code #anchor} fragment, or {@code null} if absent
  */
 public record DocRef(String path, String anchor) {
 

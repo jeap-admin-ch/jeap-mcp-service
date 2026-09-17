@@ -15,9 +15,10 @@ import io.modelcontextprotocol.spec.McpSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -157,7 +158,7 @@ class JeapRagToolsMetricsTest {
     }
 
     @Configuration
-    @EnableRetry
+    @EnableAspectJAutoProxy
     static class TestConfig {
 
         @Bean
@@ -177,10 +178,14 @@ class JeapRagToolsMetricsTest {
         }
 
         @Bean
-        JeapRagTools jeapRagTools(McpSyncClient projectRagClient, McpMetrics mcpMetrics) {
+        JeapRagTools jeapRagTools(McpSyncClient projectRagClient, McpMetrics mcpMetrics,
+                                  @Value("${jeap.mcp.upstream.retry.max-attempts}") int retryMaxAttempts,
+                                  @Value("${jeap.mcp.upstream.retry.backoff-millis}") long retryBackoffMillis) {
             JeapDocsProperties props = TestDocsProperties.defaults();
             DocumentSearch documentSearch = new DocumentSearch(new DocsReader(new DocPathPolicy(props)), props);
-            return new JeapRagTools(List.of(projectRagClient), CLIENT_NAME, false, mcpMetrics, documentSearch);
+            return new JeapRagTools(List.of(projectRagClient), CLIENT_NAME, false, retryMaxAttempts,
+                    retryBackoffMillis, mcpMetrics, documentSearch,
+                    new JeapRagProperties(25, 5, 2000, 20), new RagFilePathPolicy(props));
         }
     }
 }

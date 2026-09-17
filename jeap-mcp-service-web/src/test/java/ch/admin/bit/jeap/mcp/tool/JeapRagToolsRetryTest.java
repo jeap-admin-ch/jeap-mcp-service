@@ -11,9 +11,9 @@ import io.modelcontextprotocol.spec.McpSchema;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -24,11 +24,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * Verifies that {@code @Retryable} on the {@link JeapRagTools} {@code @Tool} methods actually fires
- * through Spring AOP and honours the configured properties. Uses a custom (non-default) {@code
- * max-attempts=5} so a passing test proves the SpEL placeholders resolve against {@code Environment}
- * — if placeholder resolution silently fell back to the annotation defaults (3), the assertions
- * below would fail.
+ * Verifies that {@link UpstreamRagInvoker}'s {@code RetryTemplate}-based retry actually fires and
+ * honours the configured properties. Uses a custom (non-default) {@code max-attempts=5} so a
+ * passing test proves the placeholders resolve against {@code Environment} — if placeholder
+ * resolution silently fell back to the constructor defaults (3), the assertions below would fail.
  */
 @SpringJUnitConfig(JeapRagToolsRetryTest.TestConfig.class)
 @TestPropertySource(properties = {
@@ -78,8 +77,9 @@ class JeapRagToolsRetryTest {
 
     @Test
     void illegalStateExceptionIsNotRetried() {
-        // Pins the noRetryFor = IllegalStateException.class contract on @Retryable. If someone
-        // removes it, this test sees CONFIGURED_MAX_ATTEMPTS invocations instead of one and fails.
+        // Pins the IllegalStateException-is-not-retryable contract on UpstreamRagInvoker's
+        // RetryTemplate. If someone removes it, this test sees CONFIGURED_MAX_ATTEMPTS invocations
+        // instead of one and fails.
         IllegalStateException failure = new IllegalStateException("permanent configuration problem");
         when(projectRagClient.callTool(any())).thenThrow(failure);
 
@@ -89,7 +89,6 @@ class JeapRagToolsRetryTest {
     }
 
     @Configuration
-    @EnableRetry
     static class TestConfig {
 
         @Bean
@@ -101,11 +100,14 @@ class JeapRagToolsRetryTest {
         }
 
         @Bean
-        JeapRagTools jeapRagTools(McpSyncClient projectRagClient) {
+        JeapRagTools jeapRagTools(McpSyncClient projectRagClient,
+                                  @Value("${jeap.mcp.upstream.retry.max-attempts}") int retryMaxAttempts,
+                                  @Value("${jeap.mcp.upstream.retry.backoff-millis}") long retryBackoffMillis) {
             JeapDocsProperties props = TestDocsProperties.defaults();
             DocumentSearch documentSearch = new DocumentSearch(new DocsReader(new DocPathPolicy(props)), props);
-            return new JeapRagTools(List.of(projectRagClient), CLIENT_NAME, false,
-                    new McpMetrics(new SimpleMeterRegistry()), documentSearch);
+            return new JeapRagTools(List.of(projectRagClient), CLIENT_NAME, false, retryMaxAttempts,
+                    retryBackoffMillis, new McpMetrics(new SimpleMeterRegistry()), documentSearch,
+                    new JeapRagProperties(25, 5, 2000, 20), new RagFilePathPolicy(props));
         }
     }
 }

@@ -10,6 +10,7 @@ below marked **required** must be supplied by the **instance** - the microservic
 | Property                                            | Required | Default | Description                                                                                                                                                                                            |
 |------------------------------------------------------|----------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `jeap.mcp.knowledge.overview-docs-location`         | yes      | -       | Filesystem path to the indexed jEAP source (`jeap_get_document`, `jeap_overview`) - wherever the instance's `Dockerfile` `COPY --from`'d `/jeap/src` to, see [Deployment](deployment.md)              |
+| `jeap.mcp.docs.docs-root`                           | no, but see note | `/jeap/src` | Filesystem root `DocPathPolicy` (docs tools) **and** `RagFilePathPolicy` (`jeap_find_definition`/`jeap_find_references`/`jeap_get_call_graph`'s `file_path` containment check) are anchored to. Must equal the path the instance's `Dockerfile` `COPY --from`'d `/jeap/src` to - an instance that copies it elsewhere and does not override this will reject every legitimate `file_path` on those three tools, visible only as a `warn`-level log line (`RagFilePathPolicy` also logs the effective root once at startup) |
 | `jeap.security.oauth2.resourceserver.system-name`   | yes      | -       | The instance's OAuth2/IAM system identifier used by the jEAP security starter to validate incoming tokens. Instance-specific by definition - never set at the library level                          |
 | `server.servlet.context-path`                       | no       | `/${spring.application.name}` | Must resolve to `/${spring.application.name}`. Without it the app serves at `/`, breaking every route/health-check path that assumes this prefix                                     |
 | `spring.ai.mcp.client.toolcallback.enabled`         | no       | `false` | Must stay `false`. The actual switch preventing raw upstream `project-rag` tools (`index_codebase`, `clear_index`, ...) from leaking through the MCP server - shipped as a library default rather than merely documented as required, so it can't be silently skipped |
@@ -48,6 +49,20 @@ above - they work correctly regardless of packaging already.
 
 The fetch fails closed: a slow/unreachable `source-url` falls back to the last-cached content, or a
 "currently being loaded" placeholder if nothing has ever been cached - never a startup failure.
+
+## RAG argument limits
+
+Server-side caps on the `jeap_*` RAG tools' arguments (`JeapRagProperties`), enforced because those
+tools are reachable anonymously (see `McpSecurityConfig`) - see the class's own javadoc for the
+clamp-vs-reject rationale.
+
+| Property                        | Required | Default | Description                                                                                                                          |
+|----------------------------------|----------|---------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `jeap.mcp.rag.max-limit`         | no       | `25`    | Upper bound for any `limit` argument (`jeap_find_code_examples`, `jeap_find_references`, `jeap_search_by_filters`) - silently clamped, not rejected |
+| `jeap.mcp.rag.max-depth`         | no       | `5`     | Upper bound for `jeap_get_call_graph`'s `depth` argument - silently clamped, not rejected                                              |
+| `jeap.mcp.rag.max-text-length`   | no       | `2000`  | Upper bound (characters) for any single free-text argument (`query`, `path`, `file_path`, `project`, and each element of a list argument) - **rejected**, not truncated, with a clean tool error |
+| `jeap.mcp.rag.max-list-size`     | no       | `20`    | Upper bound for the number of items in a list argument (`file_extensions`, `languages`, `path_patterns`) - **rejected**, not truncated |
+| `jeap.mcp.max-request-body-bytes`| no       | `1048576` (1 MiB) | Upper bound on a `/mcp/**` request's declared `Content-Length` (`McpRequestSizeFilter`) - rejected with `413` before the body is read. Independent of the `jeap.mcp.rag.*` caps above, which only bound individual argument fields, not the raw JSON-RPC request body |
 
 ## Management/actuator port
 

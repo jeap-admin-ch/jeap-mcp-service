@@ -56,12 +56,20 @@ Ten `@Tool`-annotated methods across four classes, wired into one `ToolCallbackP
 - `JeapVersionOverviewTool` — `jeap_version_overview`, cached/periodically refreshed from GitHub.
 - `JeapRagTools` — `jeap_find_code_examples`, `jeap_find_definition`, `jeap_find_references`,
   `jeap_get_call_graph`, `jeap_search_by_filters`, `jeap_get_statistics`, `jeap_find_in_documentation`:
-  each declares its own fixed input schema and proxies to the matching tool on an upstream
-  `project-rag` MCP server (connected over stdio, one per instance) via an injected
-  `McpSyncClient`.
+  each declares its own fixed input schema, validates/clamps its arguments via `JeapRagProperties`,
+  and delegates the actual upstream call to `UpstreamRagInvoker`, which proxies to the matching
+  tool on an upstream `project-rag` MCP server (connected over stdio, one per instance) via an
+  injected `McpSyncClient` and records chunk/parse-failure metrics for the result. `JeapRagTools`
+  constructs its own `UpstreamRagInvoker` in its constructor (not a separate Spring bean) — the
+  split exists to keep the MCP-transport/metrics concern out of the file that shapes/validates
+  tool arguments.
 - `JeapDocsTool` — `jeap_get_document`: a pure filesystem read (no upstream call) of a single doc
   by its index-local, repo-prefixed path, via `DocsReader`/`DocPathPolicy`/`DocRef` (allow-listed,
-  traversal-safe path resolution — no absolute paths, no `..`).
+  traversal-safe path resolution — no absolute paths, no `..`; caller-controlled paths, and every
+  value derived from them, are sanitized via the shared `LogSanitizer` before being logged, to
+  prevent log forging via embedded control characters — including the Unicode line separators
+  `\p{Cntrl}` alone doesn't cover, which some log viewers/JSON-log consumers also treat as line
+  breaks. `RagFilePathPolicy` uses the same utility for its own rejection logs).
 
 **Invariant, enforced by convention not code:** never set
 `spring.ai.mcp.client.toolcallback.enabled=true` (or `spring.ai.mcp.server.expose-mcp-client-tools`).
@@ -71,13 +79,54 @@ are the only sanctioned surface; there is no auto-proxy.
 
 The upstream client is selected by matching its MCP client-info name against
 `<spring.ai.mcp.client.name> - project-rag`. If `spring.ai.mcp.client.enabled=true` but no matching
-client is connected at startup, `JeapRagTools`'s bean construction fails fast; if the client is
-disabled, calls fail at call time with a clear `IllegalStateException` instead.
+client is connected at startup, `UpstreamRagInvoker`'s construction (inside `JeapRagTools`'s
+constructor) fails fast; if the client is disabled, calls fail at call time with a clear
+`IllegalStateException` instead.
 
-Every `JeapRagTools` method is `@Retryable` (`jeap.mcp.upstream.retry.*`, default 3 attempts /
-500ms backoff): the MCP Java SDK's `StdioClientTransport` can throw a transient
-`RuntimeException("Failed to enqueue message")` under back-pressure, and recovery is left to the
-caller. `IllegalStateException` (misconfiguration, not a transport hiccup) is excluded from retry.
+`UpstreamRagInvoker.call` retries the upstream call itself via a plain `RetryTemplate`
+(`jeap.mcp.upstream.retry.*`, default 3 attempts / 500ms backoff): the MCP Java SDK's
+`StdioClientTransport` can throw a transient `RuntimeException("Failed to enqueue message")` under
+back-pressure, and recovery is left to the caller. `IllegalStateException` (misconfiguration, not a
+transport hiccup) is excluded from retry. This is deliberately not `@Retryable` on the `@Tool`
+methods: those methods validate/clamp arguments (recording the `arguments.clamped`/`.rejected`
+metrics below) before ever reaching `call`, and an AOP-proxied retry there would re-run that
+argument shaping — and re-record its metrics — on every retry attempt instead of once per request.
+
+`JeapRagProperties` (`jeap.mcp.rag.*`) is the single place that decides what's "too much" for a
+`jeap_*` tool argument, since the tools are reachable anonymously (see Security below): it clamps
+`limit`/`depth` server-side to `null` when non-positive (so `Args#put` omits the key and upstream
+applies its own default — a non-positive value forwarded as-is would let a caller bypass the cap,
+since some upstream tools treat it as "unlimited") and rejects (throws
+`JeapToolValidationException`, never silently truncates) over-long free-text arguments, oversized
+filter lists, and individual over-long list elements. Its
+`validate(String jeapToolName, McpMetrics metrics, Runnable checks)` helper turns that exception
+into a returned error message in one line — and records `jeap.mcp.tool.arguments.rejected` (tagged
+by tool + argument) so a rejection is visible on the anonymous surface, not just returned to the
+caller — so each `@Tool` method's body reads
+`ragProperties.validate(TOOL_X, metrics, () -> { ...checks... }).orElseGet(() -> ...call upstream...)`
+instead of repeating a try/catch.
+
+`RagFilePathPolicy` rejects a `file_path` (on `findDefinition`/`findReferences`/`getCallGraph`)
+that is not absolute, or that resolves outside the indexed source root, before it reaches
+`UpstreamRagInvoker`. The documented calling convention (`jeap_find_code_examples`' `root_path` +
+`file_path` result fields, see the instance repos' own deployment smoke tests, e.g.
+`AfterDeploymentSmokeTestIT.locationBasedToolsWork` — that test lives in each instance repo, not
+here) always produces an absolute path, since `root_path` is itself always absolute (e.g.
+`/jeap/src/jeap-messaging`); a relative `file_path` is rejected outright rather than resolved,
+because `JeapRagTools` forwards the caller's original string unchanged, and `project-rag` would
+resolve a relative value against its own process cwd — not against the source root this policy
+checks — letting a relative value bypass containment entirely. See `RagFilePathPolicy`'s javadoc.
+`project-rag`'s own `create_file_info` (see `jeap-project-rag`'s
+`src/client/mod.rs`) canonicalizes and reads whatever `file_path` it is given with no containment
+check of its own — unguarded, this is an arbitrary-file-read primitive reachable anonymously.
+Reuses `JeapDocsProperties#docsRoot()` (default `/jeap/src`) rather than a separate property: every
+instance's `Dockerfile` `COPY`s the `jeap-project-rag-preindexed` image's `/jeap/src` verbatim, and
+that image clones every indexed repo to `/jeap/src/<project>` — the exact same root `DocPathPolicy`
+already anchors the docs tools to. Checked lexically (`Path#normalize()`, no `toRealPath()`/symlink
+resolution, no existence requirement) rather than like `DocPathPolicy`: a `file_path` that is
+contained but simply wrong must still reach `project-rag` so its own "not found" message comes back
+unchanged, and symlink escapes are already ruled out upstream by `jeap-index.sh` stripping every
+symlink before indexing.
 
 ### Security
 
@@ -87,12 +136,25 @@ this layer (per-instance network/gateway controls do the gating). Everything els
 `jeap-spring-boot-security-starter`'s own catch-all chain, gated by
 `jeap.security.oauth2.resourceserver.system-name`.
 
+That same chain also installs `McpRequestSizeFilter` (`jeap.mcp.max-request-body-bytes`, default
+1 MiB), rejecting an oversized `/mcp/**` request body with `413` before it is read/parsed —
+`JeapRagProperties`' per-argument caps bound individual fields, not the raw JSON-RPC request body
+itself.
+
 ### Metrics
 
 `McpMetrics` records per-tool-call timing (`@Timed`, tag = tool name) and, for RAG-proxy tools
 whose response carries a `results[]` array, counts each returned chunk tagged by tool/file
 extension/area (`docs`|`code`, via `DocPaths`). Metrics recording never throws — a chunk that looks
 like JSON but fails to parse increments a parse-failure counter instead of breaking the tool call.
+`jeap.mcp.tool.arguments.rejected` (tag = tool + argument) counts server-side validation rejections,
+and `jeap.mcp.tool.arguments.clamped` (same tags) counts a `limit`/`depth` actually capped — see
+`docs/metrics.md` for the full series list and a suggested PromQL watch.
+
+A rejected/denied caller input (an over-long argument, a `file_path`/docs path that escapes its
+root, ...) is logged at `warn`, not `error` — an anonymous caller can trigger unbounded volume of
+these by construction, so `error` is reserved for genuine server-side faults (e.g. an absent docs
+root) rather than ordinary bad input, keeping error-rate alerting meaningful.
 
 ## Versioning & Conventions
 

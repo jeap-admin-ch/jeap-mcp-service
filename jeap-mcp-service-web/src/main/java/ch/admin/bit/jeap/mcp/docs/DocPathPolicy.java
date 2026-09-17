@@ -36,6 +36,9 @@ public class DocPathPolicy {
     // re-walking the filesystem on every completion/complete keystroke would be wasted work.
     private volatile List<String> knownPathsCache;
 
+    /**
+     * @param props the docs configuration, used to resolve the docs root
+     */
     public DocPathPolicy(JeapDocsProperties props) {
         this.docsRoot = Path.of(props.docsRoot());
     }
@@ -43,6 +46,8 @@ public class DocPathPolicy {
     /**
      * Vet a normalized path and return its real, symlink-resolved target.
      *
+     * @param pathPart the raw, repo-prefixed candidate path
+     * @return the real, symlink-resolved target
      * @throws DocAccessException for absolute/{@code ..} paths, an absent docs root, a not-found
      *                            target, or a target outside the allow-list.
      */
@@ -51,13 +56,13 @@ public class DocPathPolicy {
         Path rootReal = realRoot();
         Path real = realTarget(pathPart);
         if (!real.startsWith(rootReal)) {
-            log.error("Denied documentation access: requested path '{}' resolved to '{}', which escapes the docs root '{}'.",
-                    pathPart, real, rootReal);
+            log.warn("Denied documentation access: requested path '{}' resolved to '{}', which escapes the docs root '{}'.",
+                    LogSanitizer.forLog(pathPart), real, rootReal);
             throw new DocAccessException("Access to this path is not allowed.");
         }
         if (!isAllowed(rootReal.relativize(real))) {
-            log.error("Denied documentation access: requested path '{}' resolved to '{}', which is not on the docs allow-list.",
-                    pathPart, real);
+            log.warn("Denied documentation access: requested path '{}' resolved to '{}', which is not on the docs allow-list.",
+                    LogSanitizer.forLog(pathPart), real);
             throw new DocAccessException("Access to this path is not allowed.");
         }
         return real;
@@ -68,6 +73,7 @@ public class DocPathPolicy {
      * ({@code jeap-docs://{ref}}). Applies the same {@link #isAllowed} rule as {@link #resolve}, so a
      * suggested path is always readable. Computed once and cached — see {@link #knownPathsCache}.
      *
+     * @return every allow-listed path under the docs root
      * @throws DocAccessException if the docs root is not available.
      */
     public List<String> listKnownPaths() {
@@ -101,12 +107,12 @@ public class DocPathPolicy {
 
     private static void guardTraversal(String pathPart) {
         if (pathPart.startsWith("/")) {
-            log.error("Denied documentation access: requested path '{}' is an absolute path.", pathPart);
+            log.warn("Denied documentation access: requested path '{}' is an absolute path.", LogSanitizer.forLog(pathPart));
             throw new DocAccessException("Absolute paths are not allowed.");
         }
         for (String segment : pathPart.split("/")) {
             if (segment.equals("..")) {
-                log.error("Denied documentation access: requested path '{}' contains a '..' traversal segment.", pathPart);
+                log.warn("Denied documentation access: requested path '{}' contains a '..' traversal segment.", LogSanitizer.forLog(pathPart));
                 throw new DocAccessException("Access to this path is not allowed.");
             }
         }
@@ -130,7 +136,7 @@ public class DocPathPolicy {
             return candidate.toRealPath();
         } catch (IOException | InvalidPathException e) {
             log.warn("Documentation not found: requested path '{}' could not be read ({}).",
-                    pathPart, e.toString());
+                    LogSanitizer.forLog(pathPart), LogSanitizer.forLog(e.toString()));
             throw new DocAccessException("Document not found.");
         }
     }

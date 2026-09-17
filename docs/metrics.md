@@ -14,6 +14,8 @@ to Prometheus.
 | `jeap_mcp_resource_reads_total{resource,extension,area}` | counter | `resource` (`jeap_docs_index`\|`jeap_doc`), `extension`, `area` | MCP **resource** reads (`resources/read`) of the `jeap-docs://index` static resource and the `jeap-docs://{ref}` resource template. Kept separate from `jeap_mcp_docs_fetched_total` so Resource-surface usage (Copilot IDE / other MCP clients reading docs as resources) can be analyzed independently of the Tool surface (`jeap_get_document`). |
 | `jeap_mcp_resource_completion_calls_total{resource,matched}` | counter | `resource` (`jeap_doc`), `matched` (`true`\|`false`) | `completion/complete` requests for a resource template's argument (currently only `jeap-docs://{ref}`, resource `jeap_doc`). A completion request is discovery/intent — a client asking "what values exist for `ref`" — not a document read; kept separate from `jeap_mcp_resource_reads_total`. Tagged by the same `resource` name so it can be compared 1:1 against `jeap_mcp_resource_reads_total`. `matched=false` means the typed prefix had no suggestions at all (dead end for the client). The typed value itself is deliberately not a tag (unbounded cardinality). |
 | `jeap_mcp_upstream_parse_failures_total{tool}` | counter | `tool` | A successful (non-error) upstream response could not be parsed for the `jeap.mcp.upstream.chunks.fetched` metric. Should be ~0; a rising value means upstream response-schema drift (the tool call itself still succeeds). |
+| `jeap_mcp_tool_arguments_rejected_total{tool,argument}` | counter | `tool`, `argument` | A `jeap_*` tool argument rejected by server-side validation (over-long free text, oversized list, an over-long list element, or a `file_path` that is not absolute / escapes the indexed source root). The `jeap_*` tools are reachable **anonymously** - with no caller identity to inspect, this is the primary signal for telling deliberate probing/abuse of the argument limits apart from normal traffic. A sustained non-zero rate (rather than the occasional legitimate typo) is worth investigating. |
+| `jeap_mcp_tool_arguments_clamped_total{tool,argument}` | counter | `tool`, `argument` (`limit`\|`depth`) | A `limit`/`depth` argument that actually exceeded its cap and was silently capped rather than rejected. Unlike a rejection this never surfaces in the tool's own response, so it's the only signal for the original abuse case this server hardens against - an anonymous caller trying to force an unbounded query against `project-rag`. |
 
 Notes:
 - `project` is **never** a Prometheus label (it stays offline). A `docs/**` file is indexed **once**, in the
@@ -69,6 +71,19 @@ Parse-failure watch (should stay flat near zero):
 
 ```promql
 sum by (tool) (increase(jeap_mcp_upstream_parse_failures_total[1d]))
+```
+
+Rejected-argument watch (abuse/probing signal on the anonymous surface - should stay low and flat; a
+spike or sustained climb is worth investigating):
+
+```promql
+sum by (tool, argument) (increase(jeap_mcp_tool_arguments_rejected_total[1h]))
+```
+
+Clamped-argument watch (same rationale, but for `limit`/`depth` capped rather than rejected):
+
+```promql
+sum by (tool, argument) (increase(jeap_mcp_tool_arguments_clamped_total[1h]))
 ```
 
 ## Retrieval ≠ usage (the caveat to keep front of mind)

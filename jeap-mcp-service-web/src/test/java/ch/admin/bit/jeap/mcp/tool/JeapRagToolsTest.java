@@ -35,6 +35,7 @@ class JeapRagToolsTest {
 
     private McpSyncClient projectRagClient;
     private DocumentSearch documentSearch;
+    private RagFilePathPolicy ragFilePathPolicy;
     private JeapRagTools tools;
 
     @BeforeEach
@@ -45,11 +46,13 @@ class JeapRagToolsTest {
         stubSuccess("anything");
         JeapDocsProperties docsProperties = TestDocsProperties.withDocsRoot(docsRoot.toString());
         documentSearch = new DocumentSearch(new DocsReader(new DocPathPolicy(docsProperties)), docsProperties);
+        ragFilePathPolicy = new RagFilePathPolicy(docsProperties);
         tools = newTools(List.of(projectRagClient), CLIENT_NAME, false);
     }
 
     private JeapRagTools newTools(List<McpSyncClient> clients, String name, boolean enabled) {
-        return new JeapRagTools(clients, name, enabled, new McpMetrics(new SimpleMeterRegistry()), documentSearch);
+        return new JeapRagTools(clients, name, enabled, 3, 0, new McpMetrics(new SimpleMeterRegistry()),
+                documentSearch, new JeapRagProperties(25, 5, 2000, 20), ragFilePathPolicy);
     }
 
     @Test
@@ -78,13 +81,23 @@ class JeapRagToolsTest {
     }
 
     @Test
+    void findCodeExamplesClampsOverLargeLimit() {
+        tools.findCodeExamples("kafka listener", null, null, 1000, null, null);
+
+        McpSchema.CallToolRequest request = captureRequest();
+        assertEquals(25, ((Number) request.arguments().get("limit")).intValue(),
+                "an over-large limit is capped server-side (maxLimit=25) before reaching upstream");
+    }
+
+    @Test
     void findDefinitionPassesAllRequestedArguments() {
-        tools.findDefinition("Foo.java", 42, 0, "jeap-messaging");
+        String filePath = docsRoot.resolve("Foo.java").toString();
+        tools.findDefinition(filePath, 42, 0, "jeap-messaging");
 
         McpSchema.CallToolRequest request = captureRequest();
         assertEquals("find_definition", request.name());
         assertEquals(Map.of(
-                "file_path", "Foo.java",
+                "file_path", filePath,
                 "line", 42,
                 "column", 0,
                 "project", "jeap-messaging"
@@ -93,20 +106,40 @@ class JeapRagToolsTest {
 
     @Test
     void findReferencesOmitsNullOptionals() {
-        tools.findReferences("Foo.java", 10, 4, null, null);
+        String filePath = docsRoot.resolve("Foo.java").toString();
+        tools.findReferences(filePath, 10, 4, null, null);
 
         McpSchema.CallToolRequest request = captureRequest();
         assertEquals("find_references", request.name());
-        assertEquals(Map.of("file_path", "Foo.java", "line", 10, "column", 4), request.arguments());
+        assertEquals(Map.of("file_path", filePath, "line", 10, "column", 4), request.arguments());
+    }
+
+    @Test
+    void findReferencesClampsOverLargeLimit() {
+        tools.findReferences(docsRoot.resolve("Foo.java").toString(), 10, 4, 1000, null);
+
+        McpSchema.CallToolRequest request = captureRequest();
+        assertEquals(25, ((Number) request.arguments().get("limit")).intValue(),
+                "an over-large limit is capped server-side (maxLimit=25) before reaching upstream");
     }
 
     @Test
     void getCallGraphIncludesDepthWhenProvided() {
-        tools.getCallGraph("Foo.java", 1, 0, 3, null);
+        String filePath = docsRoot.resolve("Foo.java").toString();
+        tools.getCallGraph(filePath, 1, 0, 3, null);
 
         McpSchema.CallToolRequest request = captureRequest();
         assertEquals("get_call_graph", request.name());
-        assertEquals(Map.of("file_path", "Foo.java", "line", 1, "column", 0, "depth", 3), request.arguments());
+        assertEquals(Map.of("file_path", filePath, "line", 1, "column", 0, "depth", 3), request.arguments());
+    }
+
+    @Test
+    void getCallGraphClampsOverLargeDepth() {
+        tools.getCallGraph(docsRoot.resolve("Foo.java").toString(), 1, 0, 1000, null);
+
+        McpSchema.CallToolRequest request = captureRequest();
+        assertEquals(5, ((Number) request.arguments().get("depth")).intValue(),
+                "an over-large depth is capped server-side (maxDepth=5) before reaching upstream");
     }
 
     @Test
@@ -122,6 +155,91 @@ class JeapRagToolsTest {
                 "path_patterns", List.of("**/messaging/**"),
                 "limit", 20
         ), request.arguments());
+    }
+
+    @Test
+    void searchByFiltersClampsOverLargeLimit() {
+        tools.searchByFilters("kafka", null, null, null, 1000, null);
+
+        McpSchema.CallToolRequest request = captureRequest();
+        assertEquals(25, ((Number) request.arguments().get("limit")).intValue(),
+                "an over-large limit is capped server-side (maxLimit=25) before reaching upstream");
+    }
+
+    @Test
+    void findCodeExamplesRejectsOverLongQueryWithoutCallingUpstream() {
+        String result = tools.findCodeExamples("q".repeat(2001), null, null, null, null, null);
+
+        assertEquals("Argument 'query' is too long (2001 characters, maximum 2000).", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void searchByFiltersRejectsOversizedFilterListWithoutCallingUpstream() {
+        String result = tools.searchByFilters("kafka", java.util.Collections.nCopies(21, "java"),
+                null, null, null, null);
+
+        assertEquals("Argument 'file_extensions' has too many entries (21, maximum 20).", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void findDefinitionRejectsOverLongFilePathWithoutCallingUpstream() {
+        String result = tools.findDefinition("f".repeat(2001), 1, 0, null);
+
+        assertEquals("Argument 'file_path' is too long (2001 characters, maximum 2000).", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void findDefinitionRejectsAbsoluteFilePathOutsideSourceRootWithoutCallingUpstream() {
+        String result = tools.findDefinition("/etc/passwd", 1, 0, null);
+
+        assertEquals("Argument 'file_path' must resolve inside the indexed source root.", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void findReferencesRejectsRelativeFilePathWithoutCallingUpstream() {
+        // Relative is rejected outright, not resolved against the source root - see
+        // RagFilePathPolicy's javadoc for why forwarding a resolved-elsewhere relative path would
+        // be unsafe (project-rag resolves it against its own cwd, not this policy's root).
+        String result = tools.findReferences("../outside.txt", 1, 0, null, null);
+
+        assertEquals("Argument 'file_path' must be an absolute path under the indexed source root.", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void getCallGraphRejectsAbsoluteFilePathEscapingSourceRootWithoutCallingUpstream() {
+        String escapingAbsolutePath = docsRoot.resolveSibling("outside.txt").toString();
+
+        String result = tools.getCallGraph(escapingAbsolutePath, 1, 0, null, null);
+
+        assertEquals("Argument 'file_path' must resolve inside the indexed source root.", result);
+        verify(projectRagClient, never()).callTool(any());
+    }
+
+    @Test
+    void locationBasedToolsAcceptFilePathContainedInSourceRoot() {
+        // The real calling convention (root_path + "/" + file_path, as the instance repos' own
+        // deployment smoke tests exercise) produces an absolute path, since jeap_find_code_examples'
+        // own "root_path" result field is itself always absolute - a relative file_path is rejected
+        // outright (see findReferencesRejectsRelativeFilePathWithoutCallingUpstream).
+        String absoluteFilePath = docsRoot.resolve("jeap-messaging/src/main/Foo.java").toString();
+
+        tools.findDefinition(absoluteFilePath, 1, 0, null);
+
+        McpSchema.CallToolRequest request = captureRequest();
+        assertEquals(absoluteFilePath, request.arguments().get("file_path"));
+    }
+
+    @Test
+    void findInDocumentationRejectsOverLongQueryWithoutCallingUpstream() {
+        String result = tools.findInDocumentation("q".repeat(2001), null);
+
+        assertEquals("Argument 'query' is too long (2001 characters, maximum 2000).", result);
+        verify(projectRagClient, never()).callTool(any());
     }
 
     @Test
@@ -254,8 +372,9 @@ class JeapRagToolsTest {
         when(renamedClient.callTool(any())).thenReturn(new McpSchema.CallToolResult(
                 List.of(McpSchema.TextContent.builder("ok").build()), false, null, null));
 
-        JeapRagTools renamed = new JeapRagTools(List.of(renamedClient), "custom-mcp", false,
-                new McpMetrics(new SimpleMeterRegistry()), documentSearch);
+        JeapRagTools renamed = new JeapRagTools(List.of(renamedClient), "custom-mcp", false, 3, 0,
+                new McpMetrics(new SimpleMeterRegistry()), documentSearch, new JeapRagProperties(25, 5, 2000, 20),
+                ragFilePathPolicy);
         assertEquals("ok", renamed.getStatistics());
     }
 
