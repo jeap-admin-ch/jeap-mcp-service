@@ -1,7 +1,7 @@
 publiccodeYmlVersion: 0.5.0
 name: jeap-mcp-service
 applicationSuite: jEAP
-softwareVersion: 2.2.1
+softwareVersion: 2.3.0
 releaseDate: 2026-09-17
 url: "https://github.com/jeap-admin-ch/jeap-mcp-service.git"
 landingURL: "https://github.com/jeap-admin-ch/jeap"
