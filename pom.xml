@@ -34,7 +34,7 @@
     <groupId>ch.admin.bit.jeap</groupId>
     <artifactId>jeap-mcp-service</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
-    <version>2.7.1-SNAPSHOT</version>
+    <version>2.7.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>The jEAP MCP server: a reusable service exposing jEAP knowledge (source, docs,

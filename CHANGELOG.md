@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.2] - 2026-10-01
+
+### Fixed
+- Bumped the version past 2.7.1, which also failed to publish to Maven Central for the same reason
+  as 2.7.0: a partial upload left some components registered under that version, so
+  `ignorePublishedComponents` kept excluding them from the bundle on every retry.
+
 ## [2.7.1] - 2026-10-01
 
 ### Fixed
