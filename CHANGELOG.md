@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.1] - 2026-10-01
+
+### Fixed
+- Bumped the version past 2.7.0, which could no longer be published to Maven Central: a prior
+  publish attempt left `jeap-mcp-service`/`jeap-mcp-service-web` registered there under that
+  version, so `jeap-central-publishing-maven-plugin`'s `ignorePublishedComponents` kept excluding
+  them from the combined release bundle while `jeap-mcp-service-instance` was staged fresh,
+  repeatedly uploading an incomplete bundle.
+
 ## [2.7.0] - 2026-10-01
 
 ### Dependencies
