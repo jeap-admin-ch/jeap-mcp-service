@@ -9,6 +9,7 @@ Apache License Version 2.0
 -------------------------------
 
  * ch.admin.bit.jeap:jeap-mcp-service-web - [ch.admin.bit.jeap:jeap-mcp-service-web](https://github.com/jeap-admin-ch/jeap-mcp-service/tree/main/jeap-mcp-service-web)
+ * ch.admin.bit.jeap:jeap-reaction-observer-header-starter - [ch.admin.bit.jeap:jeap-reaction-observer-header-starter](https://github.com/jeap-admin-ch/jeap-reaction-observer/tree/main/jeap-reaction-observer-header-starter)
  * ch.admin.bit.jeap:jeap-spring-boot-application-starter - [ch.admin.bit.jeap:jeap-spring-boot-application-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-application-starter)
  * ch.admin.bit.jeap:jeap-spring-boot-logging-starter - [ch.admin.bit.jeap:jeap-spring-boot-logging-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-logging-starter)
  * ch.admin.bit.jeap:jeap-spring-boot-monitoring-starter - [ch.admin.bit.jeap:jeap-spring-boot-monitoring-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-monitoring-starter)
